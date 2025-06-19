@@ -79,6 +79,13 @@ jobs:
             }
           }
 
+    - name: Rename Output Installer
+      shell: pwsh
+      working-directory: ./UpdateFunctionality/bin/Release/net9.0-windows10.0.19041.0/win10-x64/AppPackages/UpdateFunctionality_${{ steps.extractVersion.outputs.version }}.0_Test
+      run: |
+        Rename-Item "UpdateFunctionality_${{ steps.extractVersion.outputs.version }}.0_x64.msix" "AutoUpdate.msix"
+
+      
     - name: Create Release
       uses: softprops/action-gh-release@v1
       with:
