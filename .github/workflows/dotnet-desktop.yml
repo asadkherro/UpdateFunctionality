@@ -52,17 +52,32 @@ jobs:
         [string] $version = [Version] $xml.Project.PropertyGroup.ApplicationDisplayVersion
         echo "version=$($version)" >> $env:GITHUB_OUTPUT
 
-    - name: Create Tag
+    - name: Create Tag If Not Exists
       uses: actions/github-script@v5
       with:
         github-token: ${{ secrets.GITHUB_TOKEN }}
         script: |
-          github.rest.git.createRef({
-            owner: context.repo.owner,
-            repo: context.repo.repo,
-            sha: context.sha,
-            ref: 'refs/tags/v${{ steps.extractVersion.outputs.version }}'
-          })
+          const tag = 'refs/tags/v${{ steps.extractVersion.outputs.version }}';
+          try {
+            await github.rest.git.getRef({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              ref: tag.replace('refs/', ''),
+            });
+            console.log(`Tag ${tag} already exists, skipping creation.`);
+          } catch (error) {
+            if (error.status === 404) {
+              await github.rest.git.createRef({
+                owner: context.repo.owner,
+                repo: context.repo.repo,
+                sha: context.sha,
+                ref: tag,
+              });
+              console.log(`Tag ${tag} created.`);
+            } else {
+              throw error;
+            }
+          }
 
     - name: Rename Auto-Update Installer
       shell: pwsh
