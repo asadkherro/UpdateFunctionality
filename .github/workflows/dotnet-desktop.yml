@@ -84,6 +84,6 @@ jobs:
       with:
         tag_name: v${{ steps.extractVersion.outputs.version }}
         files: | 
-          ./UpdateFunctionality/UpdateFunctionality.appinstaller
-          ./UpdateFunctionality/bin/Release/net9.0-windows10.0.19041.0/win10-x64/AppPackages/UpdateFunctionality_${{ steps.extractVersion.outputs.version }}.0_Test/AutoUpdate.msix
-          ./UpdateFunctionality/bin/Release/net9.0-windows10.0.19041.0/win10-x64/AppPackages/UpdateFunctionality_${{ steps.extractVersion.outputs.version }}.0_Test/UpdateFunctionality.cer
+          ./UpdateFunctionality/bin/Release/net9.0-windows10.0.19041.0/win10-x64/publish/AppPackages/**/*.msix
+          ./UpdateFunctionality/bin/Release/net9.0-windows10.0.19041.0/win10-x64/publish/AppPackages/**/*.cer
+          ./UpdateFunctionality/bin/Release/net9.0-windows10.0.19041.0/win10-x64/publish/**/*.appinstaller
