@@ -46,7 +46,11 @@ jobs:
 
     - name : VerifyPath
       shell : pwsh
-      run : Get-ChildItem $PWD
+      run : $projectPath = Join-Path $PWD "UpdateFunctionality"
+            $binPath = Join-Path $projectPath "bin\Release"
+            Write-Host "Checking for files under $binPath"
+            Get-ChildItem -Recurse $binPath -Include *.msix, *.cer | ForEach-Object {
+            Write-Host $_.FullName }
 
     - name : Upload
       uses : actions/upload-artifact@v4
