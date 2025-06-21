@@ -59,8 +59,8 @@ jobs:
       with :
         name : Build
         path : |
-            UpdateFunctionality/UpdateFunctionality/bin/Release/net9.0-windows10.0.19041.0/win10-x64/publish/AppPackages/UpdateFunctionality_1.0.0.1_Test/UpdateFunctionality_1.0.0.1_x64.msix
-            UpdateFunctionality/UpdateFunctionality/bin/Release/net9.0-windows10.0.19041.0/win10-x64/publish/AppPackages/UpdateFunctionality_1.0.0.1_Test/UpdateFunctionality_1.0.0.1_x64.cer
+            D:\a\UpdateFunctionality\UpdateFunctionality\UpdateFunctionality\bin\Release\net9.0-windows10.0.19041.0\win10-x64\AppPackages\UpdateFunctionality_1.0.0.1_Test\UpdateFunctionality_1.0.0.1_x64.cer
+            D:\a\UpdateFunctionality\UpdateFunctionality\UpdateFunctionality\bin\Release\net9.0-windows10.0.19041.0\win10-x64\AppPackages\UpdateFunctionality_1.0.0.1_Test\UpdateFunctionality_1.0.0.1_x64.msix
 
     # - name: Extract Version
     #   id: extractVersion
