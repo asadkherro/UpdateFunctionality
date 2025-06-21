@@ -46,8 +46,8 @@ jobs:
 
     - name : VerifyPath
       shell : pwsh
-      run : $projectPath = Join-Path $PWD "UpdateFunctionality"
-            $binPath = Join-Path $projectPath "bin\Release"
+      run : $projectPath = Join-Path -Path $PWD -ChildPath "UpdateFunctionality"
+            $binPath = Join-Path -Path $projectPath -ChildPath "bin\Release"
             Write-Host "Checking for files under $binPath"
             Get-ChildItem -Recurse $binPath -Include *.msix, *.cer | ForEach-Object {
             Write-Host $_.FullName }
