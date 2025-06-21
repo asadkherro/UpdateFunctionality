@@ -44,46 +44,54 @@ jobs:
       run: dotnet publish -c Release -f:net9.0-windows10.0.19041.0 /p:GenerateAppxPackageOnBuild=true /p:AppxPackageSigningEnabled=true /p:PackageCertificateThumbprint=${{ secrets.SIGNING_CERTIFICATE_THUMBPRINT }}
       working-directory: ./UpdateFunctionality
 
-    - name: Extract Version
-      id: extractVersion
-      shell: pwsh
-      run: |
-        $xml = [Xml] (Get-Content ./UpdateFunctionality/UpdateFunctionality.csproj)
-        [string] $version = [Version] $xml.Project.PropertyGroup.ApplicationDisplayVersion
-        echo "version=$($version)" >> $env:GITHUB_OUTPUT
+    - name : Upload
+      uses : actions/upload-artifact@v4
+      with :
+        name : Build
+        path : |
+            ./UpdateFunctionality/bin/Release/net9.0-windows10.0.19041.0/win10-x64/publish/AppPackages/**/*.msix
+            ./UpdateFunctionality/bin/Release/net9.0-windows10.0.19041.0/win10-x64/publish/AppPackages/**/*.cer
 
-    - name: Create Tag If Not Exists
-      uses: actions/github-script@v5
-      with:
-        github-token: ${{ secrets.GITHUB_TOKEN }}
-        script: |
-          const tag = 'refs/tags/v${{ steps.extractVersion.outputs.version }}';
-          try {
-            await github.rest.git.getRef({
-              owner: context.repo.owner,
-              repo: context.repo.repo,
-              ref: tag.replace('refs/', ''),
-            });
-            console.log(`Tag ${tag} already exists, skipping creation.`);
-          } catch (error) {
-            if (error.status === 404) {
-              await github.rest.git.createRef({
-                owner: context.repo.owner,
-                repo: context.repo.repo,
-                sha: context.sha,
-                ref: tag,
-              });
-              console.log(`Tag ${tag} created.`);
-            } else {
-              throw error;
-            }
-          }
+    # - name: Extract Version
+    #   id: extractVersion
+    #   shell: pwsh
+    #   run: |
+    #     $xml = [Xml] (Get-Content ./UpdateFunctionality/UpdateFunctionality.csproj)
+    #     [string] $version = [Version] $xml.Project.PropertyGroup.ApplicationDisplayVersion
+    #     echo "version=$($version)" >> $env:GITHUB_OUTPUT
+
+    # - name: Create Tag If Not Exists
+    #   uses: actions/github-script@v5
+    #   with:
+    #     github-token: ${{ secrets.GITHUB_TOKEN }}
+    #     script: |
+    #       const tag = 'refs/tags/v${{ steps.extractVersion.outputs.version }}';
+    #       try {
+    #         await github.rest.git.getRef({
+    #           owner: context.repo.owner,
+    #           repo: context.repo.repo,
+    #           ref: tag.replace('refs/', ''),
+    #         });
+    #         console.log(`Tag ${tag} already exists, skipping creation.`);
+    #       } catch (error) {
+    #         if (error.status === 404) {
+    #           await github.rest.git.createRef({
+    #             owner: context.repo.owner,
+    #             repo: context.repo.repo,
+    #             sha: context.sha,
+    #             ref: tag,
+    #           });
+    #           console.log(`Tag ${tag} created.`);
+    #         } else {
+    #           throw error;
+    #         }
+    #       }
    
-    - name: Create Release
-      uses: softprops/action-gh-release@v1
-      with:
-        tag_name: v${{ steps.extractVersion.outputs.version }}
-        files: | 
-          ./UpdateFunctionality/bin/Release/net9.0-windows10.0.19041.0/win10-x64/publish/AppPackages/**/*.msix
-          ./UpdateFunctionality/bin/Release/net9.0-windows10.0.19041.0/win10-x64/publish/AppPackages/**/*.cer
-          ./UpdateFunctionality/bin/Release/net9.0-windows10.0.19041.0/win10-x64/publish/**/*.appinstaller
+    # - name: Create Release
+    #   uses: softprops/action-gh-release@v1
+    #   with:
+    #     tag_name: v${{ steps.extractVersion.outputs.version }}
+    #     files: | 
+    #       ./UpdateFunctionality/bin/Release/net9.0-windows10.0.19041.0/win10-x64/publish/AppPackages/**/*.msix
+    #       ./UpdateFunctionality/bin/Release/net9.0-windows10.0.19041.0/win10-x64/publish/AppPackages/**/*.cer
+    #       ./UpdateFunctionality/bin/Release/net9.0-windows10.0.19041.0/win10-x64/publish/**/*.appinstaller
