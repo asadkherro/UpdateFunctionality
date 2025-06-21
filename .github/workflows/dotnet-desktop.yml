@@ -49,8 +49,8 @@ jobs:
       with :
         name : Build
         path : |
-            ./UpdateFunctionality/bin/Release/net9.0-windows10.0.19041.0/win10-x64/publish/AppPackages/**/*.msix
-            ./UpdateFunctionality/bin/Release/net9.0-windows10.0.19041.0/win10-x64/publish/AppPackages/**/*.cer
+            ./bin/Release/net9.0-windows10.0.19041.0/win10-x64/publish/AppPackages/**/*.msix
+            ./bin/Release/net9.0-windows10.0.19041.0/win10-x64/publish/AppPackages/**/*.cer
 
     # - name: Extract Version
     #   id: extractVersion
