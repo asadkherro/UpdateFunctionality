@@ -46,7 +46,7 @@ jobs:
 
     - name : VerifyPath
       shell : pwsh
-      run : $PWD
+      run : Get-ChildItem $PWD
 
     - name : Upload
       uses : actions/upload-artifact@v4
